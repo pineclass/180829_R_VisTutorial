@@ -15,10 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [수업자료](https://github.com/statstar/R_vis)
 - [R Graph Gallery](http://r-graph-gallery.com)
+- [R Spatial](http://rspatial.org/index.html)
 
 기타
 
 - [데이터 분석을 위한 중급 R 프로그래밍 3기 자료](https://mrchypark.github.io/dabrp_classnote3/#1)
+- [ggplot2 / tydyverse](https://ggplot2.tidyverse.org)
 
 ***
 
