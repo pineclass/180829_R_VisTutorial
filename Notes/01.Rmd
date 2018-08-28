@@ -11,16 +11,33 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 개요
 
+주교재
+
+- [R을 활용한 데이터 시각화](http://www.insightbook.co.kr/8820)
+- [예제파일](https://www.dropbox.com/s/80f4fq4qz5fktfz/R_visualization.zip)
+
 참고자료
 
 - [수업자료](https://github.com/statstar/R_vis)
 - [R Graph Gallery](http://r-graph-gallery.com)
+- [colorbrewer2](http://colorbrewer2.org)
 - [R Spatial](http://rspatial.org/index.html)
 
 기타
 
 - [데이터 분석을 위한 중급 R 프로그래밍 3기 자료](https://mrchypark.github.io/dabrp_classnote3/#1)
 - [ggplot2 / tydyverse](https://ggplot2.tidyverse.org)
+
+```{r}
+# require anyway
+requireAnyway <- function( package_name ){
+  if( !require( package_name ) ){
+    install.packages( package_name, character.only=TRUE )
+    require( package_name, character.only=TRUE )
+  }
+}
+```
+
 
 ***
 
@@ -206,60 +223,6 @@ polygon(dot[chull.data, ], angle = 45, density = 15, col = "red")
 title(main = "Polygon by chull")
 ```
 
-### Challenge
-
-#### No. 1
-
-```{r}
-par( mfrow=c(1,1) )
-q <- c(1:10)
-plot(q, q, 
-     xlab="x axis", ylab="y axis", main="challenge1")
-abline(h=5, lty=2, col="blue")
-abline(v=10, lty="dotted", col="green")
-arrows(1,1, 4,4, angle=120, col="dark green")
-text(8,9, "ABCD")
-rect(1, 6, 4, 9, density=20, col="gold", angle=180)
-legend(8, 3, c("P", "Q", "R"), lty=1:3, col=1:3)
-```
-
-#### No. 2
-
-```{r}
-par( mfrow=c(1,1) )
-layout( matrix(c(1,1,2,3), nrow=2, byrow=F) )
-plot(cars, col="blue")
-rug(cars$dist, side=2)
-
-linearMod <- lm(dist ~ speed, data=cars)
-abline(linearMod$coefficients[1], linearMod$coefficients[2], lty=2, col="green")
-
-text(cars[10,], "Cars", srt=60)
-hist(cars$speed, col="green3")
-hist(cars$dist, col="red3")
-
-```
-
-#### No. 3
-
-
-```{r}
-par( mfrow=c(1,1) )
-if(!require(raster)) install.packages("raster")
-library(raster)
-
-kor1 <- getData("GADM", country='KOR', level=1)   # 행정구역 데이터
-a <- getData('alt', country='KOR', mask=T)  # 고도 데이터
-plot(a)
-plot(kor1, add=T)
-
-points(126.5, 35.2, pch=16, col="red")
-abline(h=38, col="gray", lwd=2)
-```
-
-
-
-
 ***
 
 ## 연속형 자료의 표현
@@ -325,7 +288,40 @@ with(data , vioplot( value[treatment=="A"] , value[treatment=="B"], value[treatm
 
 
 
+*** 
 
+## import external data
+
+
+```{r}
+if(!require(XML)){ install.packages("XML") ; require(XML) }
+if(!require(RCurl)){ install.packages("RCurl") ; require(RCurl)  }
+
+theurl <- getURL("http://www.weather.go.kr/weather/observation/currentweather.jsp")
+tables <- readHTMLTable( theurl , encoding="utf-8")
+tables
+
+
+```
+
+
+
+## Motion Chart
+
+- [한스 로슬링 - 이제껏 보지 못했던 최고의 통계](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?language=ko)
+
+```{r}
+if(!require(googleVis)){ install.packages("googleVis") ; require(googleVis) }
+demo(package=.packages(all.available=T))
+demo(googleVis)
+```
+
+
+## Javascript Chart
+
+- [Markdown example with knitr and googleVis](https://cran.r-project.org/web/packages/googleVis/vignettes/Using_googleVis_with_knitr.html)
+
+- [googleVis examples](https://cran.r-project.org/web/packages/googleVis/vignettes/googleVis_examples.html)
 
 
 
