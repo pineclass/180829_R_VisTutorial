@@ -1,0 +1,83 @@
+---
+title: "R Snippet"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## library
+
+
+```{r}
+reposUrl = "http://cran.us.r-project.org"
+if(!require(spatstat)) install.packages("spatstat",repos=reposUrl); library("spatstat")
+if(!require(ggplot2)) install.packages("ggplot2",repos=reposUrl); library("ggplot2")
+if(!require(ggmap)) install.packages("ggmap",repos=reposUrl); library("ggmap")
+if(!require(sp)) install.packages("sp",repos=reposUrl); library("sp")
+if(!require(maptools)) install.packages("maptools",repos=reposUrl); library("maptools")
+if(!require(raster)) install.packages("raster", repos=reposUrl); library("raster")
+if(!require(rgdal)) install.packages("rgdal",repos=reposUrl); library("rgdal")
+if(!require(gridGraphics)) install.packages("gridGraphics",repos=reposUrl); library("gridGraphics")
+```
+
+
+아래와 같이 function을 만든다. 
+
+```{r}
+# create function
+importLib <- function( libName ){
+  if( !require( libName ,character.only=TRUE ) ){
+    install.packages( libName,repos="http://cran.us.r-project.org")
+    require( libName,character.only=TRUE )
+  } 
+}
+
+# import library
+librarys <- c("spatstat", "ggplot2", "ggmap", "sp", "maptools", "raster", "rgdal", "gridGraphics")
+for ( libName in librarys ){
+  importLib( libName )  
+}
+```
+
+
+## set working directory 
+
+
+working directory를 현재 파일 위치로 정해보자.
+
+```{r}
+
+set_wd <- function() {
+  importLib("rstudioapi") # make sure you have it installed
+  current_path <- getActiveDocumentContext()$path 
+  setwd( dirname(current_path ))
+  print( getwd() )
+}
+set_wd()
+```
+
+
+## Crawling
+
+
+인터넷에서 HTML TABLE 가져오기 
+
+- encoding 최적화 필요 `iconv()`
+
+
+```{r}
+# 실시간 기상자료 가져오기
+if (!require(XML)) install.packages("XML") ;library(XML)
+if (!require(RCurl)) install.packages("RCurl") ;library(RCurl)
+
+uri <- "http://www.weather.go.kr/weather/observation/currentweather.jsp?type=t99&mode=0&stn=0&auto_man=a"
+url2 <- iconv( getURL(uri, .encoding="euc-kr"), from="euc-kr", to='UTF-8' )
+tables <- as.data.frame( readHTMLTable(url2, encoding='UTF-8') )
+head(tables)
+
+```
